@@ -1,0 +1,20 @@
+{
+  "name": "terraconix",
+  "version": "1.0.0",
+  "description": "Discord.JS Bot Maker GUI",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron . --no-sandbox"
+  },
+  "keywords": [
+    "Bot",
+    "Maker",
+    "discord.js",
+    "discord.py"
+  ],
+  "author": "Ottegi",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^11.0.2"
+  }
+}

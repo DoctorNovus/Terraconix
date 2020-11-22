@@ -1,0 +1,113 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    color: white;
+}
+
+ul[active="true"] > * {
+    display: block;
+}
+
+ul > li {
+    display: none;
+}
+
+ul > * {
+    display: none;
+}
+
+ul, li {
+    margin: 0%;
+}
+
+.Variable {
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-top-left-radius: 20%;
+    border-top-right-radius: 20%;
+}
+
+.Code {
+    width: 100%;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-top-left-radius: 20%;
+    border-top-right-radius: 20%;
+}
+
+.StructBody {
+    background-color: gray;
+    border-bottom-left-radius: 20%;
+    border-bottom-right-radius: 20%;
+}
+
+.Template {
+    width: 150%;
+    background-color: silver;
+    color: white;
+    text-align: center;
+    border-radius: 20%;
+}
+
+* {
+    margin: 0%;
+}
+
+#contextmenu ul {
+    border-radius: 20%;
+}
+
+#contextmenu ul {
+    -webkit-text-stroke-color: red;
+    -webkit-text-stroke-width: 0.50px; 
+    -webkit-text-fill-color: rgb(128, 115, 0);
+}
+
+#contextmenu > div > ul {
+    margin: 0%;
+    padding: 0%;
+}
+
+#body {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-rows: 82.5% 17.5%;
+}
+
+#fileEditor {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(54, 54, 54);
+    display: grid;
+    grid-template-columns: 75% 25%;
+}
+
+#fileViewer {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(44, 44, 44);
+    border: 1px solid white;
+}
+
+#output {
+    border: 1px solid white;
+    background-color: rgb(47, 47, 47);
+}
+
+#overlay {
+    overflow: scroll;
+}
+
+::-webkit-scrollbar {
+    width: 0px;  /* Remove scrollbar space */
+    background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* Optional: show position indicator in red */
+::-webkit-scrollbar-thumb {
+    background: #FF0000;
+}

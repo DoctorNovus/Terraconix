@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Terraconix Bot Maker</title>
+    <link rel="stylesheet" href="styles/index.css" />
+</head>
+
+<body>
+    <style>
+        * {
+            position: relative;
+        }
+    </style>
+
+    <div id="body">
+        <div id="fileEditor">
+            <div id="overlay">
+
+            </div>
+            <div id="output">
+
+            </div>
+        </div>
+        <div id="fileViewer">
+
+        </div>
+    </div>
+
+    <div id="contextmenu" style="position: absolute;">
+
+    </div>
+
+    <script>
+        let ws = new WebSocket(`ws://${window.location.hostname}`);
+        ws.onmessage = (data) => {
+            try {
+                data = JSON.parse(data.data);
+            } catch (error) {
+                
+            }
+
+            switch(data.type){
+                case "output":
+                    let ot = document.getElementById("output");
+                    ot.innerHTML += `<h3>${data.data}</h3>`;
+                    break;
+            }
+        }
+    </script>
+
+    <script src="scripts//templates.js"></script>
+    <script src="scripts/script.js"></script>
+    <script src="scripts/context-menu.js"></script>
+    <script src="scripts/serverConnection.js"></script>
+</body>
+
+</html>
