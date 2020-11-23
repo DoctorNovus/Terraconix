@@ -64,6 +64,23 @@ app.get("/api/output", (req, res) => {
 
 app.get("/api/getCode", (req, res) => {
     res.send(fs.readFileSync("index.py"));
+});
+
+app.get("/api/settings", (req, res) => {
+    res.send(JSON.parse(fs.readFileSync("./settings.json")))
+});
+
+app.post("/api/saveSettings", (req, res) => {
+    let body = "";
+
+    req.on("data", (chunk) => {
+        body += chunk;
+    });
+
+    req.on("end", () => {
+        console.log(body);
+        fs.writeFileSync("./settings.json", body);
+    });
 })
 
 let server = app.listen(port, () => {

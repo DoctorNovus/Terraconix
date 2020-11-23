@@ -24,7 +24,7 @@
             </div>
         </div>
         <div id="fileViewer">
-
+            <button onclick="(async() => await menu.setSettings())()">Save</button>
         </div>
     </div>
 
@@ -38,10 +38,10 @@
             try {
                 data = JSON.parse(data.data);
             } catch (error) {
-                
+
             }
 
-            switch(data.type){
+            switch (data.type) {
                 case "output":
                     let ot = document.getElementById("output");
                     ot.innerHTML += `<h3>${data.data}</h3>`;
@@ -50,7 +50,7 @@
         }
     </script>
 
-    <script src="scripts//templates.js"></script>
+    <script src="scripts/templates.js"></script>
     <script src="scripts/script.js"></script>
     <script src="scripts/context-menu.js"></script>
     <script src="scripts/serverConnection.js"></script>

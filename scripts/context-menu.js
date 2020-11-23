@@ -76,15 +76,10 @@ class ContextMenu {
             }
     }
 
-    createNewPanel(e, type) {
+    createNewPanel(e, type, name) {
         let div = document.createElement("div");
         div.style.display = "inline-block";
         div.draggable = "true";
-
-        div.addEventListener("dragend", (ev) => {
-            div.style.top = `${ev.clientY}px`;
-            div.style.left = `${ev.clientX}px`;
-        });
 
         let header = document.createElement("div");
         let body = document.createElement("div");
@@ -92,36 +87,69 @@ class ContextMenu {
         let p = document.createElement("p");
         let panel = this.panels[type];
 
-        p.innerText = panel.name;
+        let { x, y } = menu.getPos(e);
+
+        div.addEventListener("dragend", (ev) => {
+            div.style.top = `${ev.clientY}px`;
+            div.style.left = `${ev.clientX}px`;
+
+            switch (type) {
+                case "Code":
+                    sm.scripts.find(e => e.name == (name || panel.name)).pos = {
+                        x: ev.clientX,
+                        y: ev.clientY
+                    };
+                    break;
+    
+                case "Variable":
+                    sm.variables.find(e => e.name == (name || panel.name)).pos = {
+                        x: ev.clientX,
+                        y: ev.clientY
+                    };
+                    break;
+    
+                case "Template":
+                    sm.templates.find(e => e.name == (name || panel.name)).pos = {
+                        x: ev.clientX,
+                        y: ev.clientY
+                    };
+                    break;
+            }
+        });
+
+        p.innerText = name || panel.name;
         p.contentEditable = true;
         p.classList = type;
         p.oldName = p.innerText;
 
-        switch(type){
+        switch (type) {
             case "Code":
                 sm.scripts.push({
                     name: p.innerText,
-                    code: ""
+                    code: "",
+                    pos: { x, y }
                 });
                 break;
 
             case "Variable":
                 sm.variables.push({
                     name: p.innerText,
-                    data: ""
+                    data: "",
+                    pos: { x, y }
                 });
                 break;
 
             case "Template":
                 sm.templates.push({
                     name: p.innerText,
-                    code: ""
+                    code: "",
+                    pos: { x, y }
                 });
                 break;
         }
 
         p.addEventListener("input", (e) => {
-            switch(type){
+            switch (type) {
                 case "Code":
                     sm.scripts.find(e => e.name == p.oldName).name = p.innerText;
                     p.oldName = p.innerText;
@@ -147,9 +175,8 @@ class ContextMenu {
         div.appendChild(header);
         div.appendChild(body);
 
-        let { x, y } = menu.getPos(e);
-        div.style.top = `${x}px`;
-        div.style.left = `${y}px`;
+        div.style.top = `${y}px`;
+        div.style.left = `${x}px`;
 
         document.getElementById("overlay").appendChild(div);
     }
@@ -249,7 +276,43 @@ class ContextMenu {
 
         return { x, y }
     }
+
+    async loadSettings() {
+        let settings = await (await fetch("/api/settings")).json();
+        console.log(settings);
+        if (settings.variables)
+            for (let variable of settings.variables) {
+                this.createNewPanel({ clientX: variable.pos.x, clientY: variable.pos.y, target: {offsetLeft: 0, offsetTop: 0} }, "Variable", variable.name);
+            }
+
+        if (settings.scripts)
+            for (let code of settings.scripts) {
+                this.createNewPanel({ clientX: code.pos.x, clientY: code.pos.y, target: {offsetLeft: 0, offsetTop: 0}  }, "Code", code.name);
+            }
+
+        if (settings.templates)
+            for (let template of settings.templates) {
+                this.createNewPanel({ clientX: template.pos.x, clientY: template.pos.y, target: {offsetLeft: 0, offsetTop: 0} }, "Template", template.name);
+            }
+    }
+
+    async setSettings() {
+        let settings = {
+            variables: sm.variables,
+            scripts: sm.scripts,
+            templates: sm.templates
+        };
+
+        await fetch("/api/saveSettings", {
+            method: "POST",
+            body: JSON.stringify(settings)
+        });
+    }
 }
 
 let menu = new ContextMenu();
 menu.attachMenu(document.getElementById("overlay"));
+
+(async () => {
+    await menu.loadSettings();
+})();
